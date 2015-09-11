@@ -1,15 +1,27 @@
-require_relative 'simple_card'
+# -*- encoding: utf-8 -*-
+
+require_relative 'card'
 require_relative 'lear'
+
 class Deck
   def initialize
-    @cards = []
-    (2..10).each do |nominal|
-      @cards << Card.new(Lear::SPADES, nominal)
-      @cards << Card.new(Lear::CLUBS, nominal)
-      @cards << Card.new(Lear::DIAMONDS, nominal)
-      @cards << Card.new(Lear::HEARTS, nominal)
-    end
-    ['']
+    fill
+  end
 
+  def fill
+    @cards = []
+    Lear.all.each do |lear|
+      (2..10).each do |nominal|
+        @cards << Card.new(lear, Card::SIMPLE, nominal)
+      end
+      ['J', 'Q', 'K'].each do |symbol|
+        @cards << Card.new(lear, Card::PICTURE, 10, symbol)
+      end
+      @cards << Card.new(lear, Card::ACE, 10, "A")
+    end
+  end
+
+  def shuffle
+    @cards.shuffle!
   end
 end
