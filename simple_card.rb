@@ -1,0 +1,3 @@
+class SimpleCard < Card
+
+end
