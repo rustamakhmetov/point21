@@ -1,15 +1,26 @@
 # -*- encoding: utf-8 -*-
 
-require_relative 'clubs_lear'
-require_relative 'diamonds_lear'
-require_relative 'hearts_lear'
-require_relative 'spades_lear'
-
 class Lear
-  CLUBS = ClubsLear.new
-  DIAMONDS = DiamondsLear.new
-  HEARTS = HeartsLear.new
-  SPADES = SpadesLear.new
+  CLUBS = (Class.new do
+    def to_s
+      "+"
+    end
+  end).new
+  DIAMONDS = (Class.new do
+    def to_s
+      "<>"
+    end
+  end).new
+  HEARTS = (Class.new do
+    def to_s
+      "<3"
+    end
+  end).new
+  SPADES = (Class.new do
+    def to_s
+      "^"
+    end
+  end).new
 
   def self.all
     [CLUBS, DIAMONDS, HEARTS, SPADES]
