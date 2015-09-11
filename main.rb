@@ -4,25 +4,35 @@
 require_relative 'human_player'
 require_relative 'android_player'
 require_relative 'user_exception'
+require_relative 'deck'
 
 class Main
   def initialize
-    @android = AndroidPlayer("Дилер")
+    @android = AndroidPlayer.new("Дилер", 100)
+    @human = HumanPlayer.new("Unknow", 100)
+    @iter_players = [@human, @android].cycle
+    @deck = Deck.new
   end
 
   def run
     puts "Игра блэкджек. Введите свое имя:"
-    name = gets.chomp
-    @human = HumanPlayer.new(name)
+    name = "Rustam" #gets.chomp
+    @human.name = name
+    2.times do
+      @human << @deck.shift
+      @android << @deck.shift
+    end
     while true do
       begin
+        @player = @iter_players.next
         show_menu
+        show_cards
         menu_id = gets.to_i
         case menu_id
           when 1
-            #add_station
+            puts "#{@player} pass"
           when 2
-            #add_train
+            @player << @deck.shift
           when 3
             #modify_train(menu_id)
           when 4
@@ -40,13 +50,17 @@ class Main
 
   def show_menu
     system("clear")
-    #puts "Current station: #{@station}, train: #{@train}"
     puts """Выберите:
    1. Пропустить
    2. Добавить карту
    3. Открыть карты
    4. Выход
 """
+  end
+
+  def show_cards
+    puts "#{@human}, #{@human.show_cards(true)}, score: #{@human.score}"
+    puts "#{@android}, #{@android.show_cards(false)}" #, score: #{@android.score}
   end
 end
 
