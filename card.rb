@@ -11,12 +11,17 @@ class Card
   «К» = «K» — King
   «Т» = «A» — Ace
 =end
+  attr_reader :nominal, :type
 
   def initialize(lear, type, nominal, symbol=nil)
     @nominal = nominal
     @type = type
     @lear = lear
-    @symbol = @nominal if symbol.nil?
+    @symbol = symbol || @nominal
+  end
+
+  def ace?
+    @type==Card::ACE
   end
 
   def to_s
