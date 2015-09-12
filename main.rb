@@ -10,7 +10,8 @@ class Main
   def initialize
     @android = AndroidPlayer.new("Дилер", 100)
     @human = HumanPlayer.new("Unknow", 100)
-    @iter_players = [@human, @android].cycle
+    @players = [@human, @android]
+    @iter_players = @players.cycle
     @deck = Deck.new
   end
 
@@ -22,45 +23,40 @@ class Main
       @human << @deck.shift
       @android << @deck.shift
     end
-    while true do
+    loop do
       begin
         @player = @iter_players.next
-        show_menu
         show_cards
-        menu_id = gets.to_i
-        case menu_id
-          when 1
-            puts "#{@player} pass"
-          when 2
-            @player << @deck.shift
-          when 3
-            #modify_train(menu_id)
-          when 4
+        case @player.run(@deck)
+          when :pass
+            puts "#{@player} пропускает"
+          when :game_end
+            show_winner
+            break
+          when :game_break
             puts "Игра прервана"
             break
-          else
-            puts "Неверный выбор"
         end
-      rescue UserException => e
-        puts e.message
+      #rescue UserException => e
+      #  puts e.message
       end
       sleep 1
     end
   end
 
-  def show_menu
-    system("clear")
-    puts """Выберите:
-   1. Пропустить
-   2. Добавить карту
-   3. Открыть карты
-   4. Выход
-"""
+  def show_winner
+    show_cards(true)
+    winner = @players.select{|x| !x.lost?}.max_by{|x| x.scores}
+    if winner.nil?
+      puts "Ничья"
+    else
+      puts "Выиграл #{winner}"
+    end
   end
 
-  def show_cards
+  def show_cards(visible=false)
     puts "#{@human}, #{@human.show_cards(true)}, score: #{@human.score}"
-    puts "#{@android}, #{@android.show_cards(false)}" #, score: #{@android.score}
+    puts "#{@android}, #{@android.show_cards(visible)}" + ", score: #{@android.score}" if visible
   end
 end
 

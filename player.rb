@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 class Player
   attr_accessor :name
   attr_reader :score
@@ -7,6 +9,33 @@ class Player
     @bank = bank
     @cards = []
     @score = 0
+  end
+
+  def show_cards(visible)
+    if visible
+      @cards.join(" ")
+    else
+      (["*"]*@cards.length).join(" ")
+    end
+  end
+
+  def run
+    :game_end if game_end?
+  end
+
+  def lost?
+    @scores>21
+  end
+
+  def to_s
+    @name
+    #"#{@name} [#{show_cards}] => #{@score}"
+  end
+
+  protected
+
+  def add_card(deck)
+    self << deck.shift
   end
 
   def <<(card)
@@ -22,16 +51,8 @@ class Player
     end
   end
 
-  def show_cards(visible)
-    if visible
-      @cards.join(" ")
-    else
-      (["*"]*@cards.length).join(" ")
-    end
+  def game_end?
+    @cards.length==3 or @score>=21
   end
 
-  def to_s
-    @name
-    #"#{@name} [#{show_cards}] => #{@score}"
-  end
 end
