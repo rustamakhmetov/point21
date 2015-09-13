@@ -15,18 +15,16 @@ class HumanPlayer < Player
   end
 
   def run(deck)
-    menu_id = Utils.show_menu_with_select(@menu, true)
+    choices = @menu.select { |key, value| key>@pass_count }
+    menu_id = Utils.show_menu_with_select(choices, true)
     case menu_id
-      when 1
+      when 1 then
+        @pass_count+=1
         return :pass
-      when 2
-        add_card(deck)
-      when 3
-        return :game_end
-      when 4
-        return :game_break
+      when 2 then return add_card(deck)
+      when 3 then return :game_end
+      when 4 then return :game_break
     end
-    super()
   end
 
 end

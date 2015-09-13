@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 require_relative 'bank'
+require_relative 'not_enough_money'
 
 class Player
   attr_accessor :name, :bank
@@ -9,8 +10,7 @@ class Player
   def initialize(name=nil, bank_amount)
     @name = name
     @bank = Bank.new(bank_amount)
-    @cards = []
-    @score = 0
+    clear_cards
   end
 
   def show_cards(visible)
@@ -22,11 +22,16 @@ class Player
   end
 
   def run
-    :game_end if game_end?
+    #:game_end if game_end?
+    false
   end
 
   def lost?
-    @scores>21
+    @score>21
+  end
+
+  def win?
+    @score==21
   end
 
   def <<(card)
@@ -46,7 +51,8 @@ class Player
     @bank >> amount
     amount
   rescue RuntimeError => e
-    raise "[#{self}] #{e.message}"
+    #raise "[#{self}] #{e.message}"
+    raise NotEnoughMoney.new(self, e)
   end
 
   def deposit_money(amount)
@@ -54,19 +60,25 @@ class Player
     @bank.to_i
   end
 
+  def clear_cards
+    @cards = []
+    @score = 0
+    @pass_count = 0
+  end
+
+  def game_end?
+    @cards.length>=3
+  end
+
   def to_s
     @name
-    #"#{@name} [#{show_cards}] => #{@score}"
   end
 
   protected
 
   def add_card(deck)
     self << deck.shift
-  end
-
-  def game_end?
-    @cards.length==3 or @score>=21
+    :add_card
   end
 
 end

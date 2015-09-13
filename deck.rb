@@ -17,7 +17,7 @@ class Deck
       %w(J Q K).each do |symbol|
         @cards << Card.new(lear, Card::PICTURE, 10, symbol)
       end
-      @cards << Card.new(lear, Card::ACE, 11, "A")
+      @cards << Card.new(lear, Card::ACE, 11, 'A')
     end
     shuffle!
   end

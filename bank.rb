@@ -1,5 +1,5 @@
 class Bank
-  #attr_reader :amount
+  attr_writer :amount
 
   def initialize(amount=0)
     @amount = amount

@@ -2,8 +2,8 @@
 
 class Lear
   CLUBS = :+
-  DIAMONDS = :<>
-  HEARTS = :"<3"
+  DIAMONDS = :'<>'
+  HEARTS = :'<3'
   SPADES = :^
 
   def self.all

@@ -4,8 +4,7 @@ require_relative 'player'
 
 class AndroidPlayer < Player
   def run(deck)
-    return :pass if @scores>18
+    return :pass if @score>=18
     add_card(deck)
-    super()
   end
 end
