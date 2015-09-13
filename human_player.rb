@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 require_relative 'player'
+require_relative 'utils'
 
 class HumanPlayer < Player
   def initialize(name=nil, bank)
@@ -14,7 +15,7 @@ class HumanPlayer < Player
   end
 
   def run(deck)
-    menu_id = show_menu_with_select
+    menu_id = Utils.show_menu_with_select(@menu, true)
     case menu_id
       when 1
         return :pass
@@ -26,22 +27,6 @@ class HumanPlayer < Player
         return :game_break
     end
     super()
-  end
-
-  def show_menu_with_select
-    loop do
-      system("clear")
-      puts "Выберите:"
-      p @menu
-      menu_id = gets.to_i
-      if @menu.has_key?(menu_id)
-        break
-      else
-        puts "Неверный выбор"
-        sleep 2
-      end
-    end
-    menu_id
   end
 
 end
