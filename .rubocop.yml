@@ -1,0 +1,13 @@
+# Offense count: 10
+Style/Documentation:
+  Exclude:
+    - 'android_player.rb'
+    - 'bank.rb'
+    - 'card.rb'
+    - 'deck.rb'
+    - 'human_player.rb'
+    - 'lear.rb'
+    - 'main.rb'
+    - 'not_enough_money.rb'
+    - 'player.rb'
+    - 'utils.rb'

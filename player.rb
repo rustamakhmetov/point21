@@ -7,7 +7,7 @@ class Player
   attr_accessor :name, :bank
   attr_reader :score
 
-  def initialize(name=nil, bank_amount)
+  def initialize(name = nil, bank_amount)
     @name = name
     @bank = Bank.new(bank_amount)
     clear_cards
@@ -15,9 +15,9 @@ class Player
 
   def show_cards(visible)
     if visible
-      @cards.join(" ")
+      @cards.join(' ')
     else
-      (["*"]*@cards.length).join(" ")
+      (['*'] * @cards.length).join(' ')
     end
   end
 
@@ -27,20 +27,20 @@ class Player
   end
 
   def lost?
-    @score>21
+    @score > 21
   end
 
   def win?
-    @score==21
+    @score == 21
   end
 
   def <<(card)
     @cards << card
     if card.ace?
-      if @score<=10
+      if @score <= 10
         @score += card.nominal
       else
-        @score +=1
+        @score += 1
       end
     else
       @score += card.nominal
@@ -51,7 +51,7 @@ class Player
     @bank >> amount
     amount
   rescue RuntimeError => e
-    #raise "[#{self}] #{e.message}"
+    # raise "[#{self}] #{e.message}"
     raise NotEnoughMoney.new(self, e)
   end
 
@@ -67,7 +67,7 @@ class Player
   end
 
   def game_end?
-    @cards.length>=3
+    @cards.length >= 3
   end
 
   def to_s
@@ -80,5 +80,4 @@ class Player
     self << deck.shift
     :add_card
   end
-
 end

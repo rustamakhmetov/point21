@@ -1,17 +1,17 @@
 class Bank
   attr_writer :amount
 
-  def initialize(amount=0)
+  def initialize(amount = 0)
     @amount = amount
   end
 
-  def <<(amount)
-    @amount+=amount
+  def <<(other)
+    @amount += other
   end
 
-  def >>(amount)
-    raise "Недостаточно баланса для списания #{amount} долларов" if amount>@amount
-    @amount-=amount
+  def >>(other)
+    fail "Недостаточно баланса для списания #{other} долларов" if other > @amount
+    @amount -= other
   end
 
   def transfer(bank, amount)

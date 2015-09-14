@@ -5,15 +5,9 @@ class Card
   PICTURE = :picture
   ACE = :ace
 
-=begin
-  «В» = «J» — Jack
-  «Д» = «Q» — Queen
-  «К» = «K» — King
-  «Т» = «A» — Ace
-=end
   attr_reader :nominal, :type
 
-  def initialize(lear, type, nominal, symbol=nil)
+  def initialize(lear, type, nominal, symbol = nil)
     @nominal = nominal
     @type = type
     @lear = lear
@@ -21,7 +15,7 @@ class Card
   end
 
   def ace?
-    @type==Card::ACE
+    @type == Card::ACE
   end
 
   def to_s
