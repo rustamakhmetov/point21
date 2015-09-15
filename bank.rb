@@ -10,7 +10,8 @@ class Bank
   end
 
   def >>(other)
-    fail "Недостаточно баланса для списания #{other} долларов" if other > @amount
+    message = "Недостаточно баланса для списания #{other} долларов"
+    fail message if other > @amount
     @amount -= other
   end
 
