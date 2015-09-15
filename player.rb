@@ -70,6 +70,13 @@ class Player
     @cards.length >= 3
   end
 
+  def show_state(visible = true)
+    state = "#{self}, #{show_cards(visible)}"
+    state += ", score: #{@score}" if visible
+    state += ", bank: #{@bank.to_i}"
+    puts state
+  end
+
   def to_s
     @name
   end

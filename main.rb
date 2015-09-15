@@ -107,8 +107,8 @@ class Main
 
   def show_cards(visible = false)
     puts "Банк игры: #{@bank.to_i}"
-    puts "#{@human}, #{@human.show_cards(true)}, score: #{@human.score}, bank: #{@human.bank.to_i}"
-    puts "#{@android}, #{@android.show_cards(visible)}" + (visible ? ", score: #{@android.score}" : '') + ", bank: #{@android.bank.to_i}"
+    @human.show_state
+    @android.show_state(visible)
   end
 
   def game_end?
