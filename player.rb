@@ -7,7 +7,7 @@ class Player
   attr_accessor :name, :bank
   attr_reader :score
 
-  def initialize(name = nil, bank_amount)
+  def initialize(name, bank_amount)
     @name = name
     @bank = Bank.new(bank_amount)
     clear_cards

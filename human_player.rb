@@ -4,7 +4,7 @@ require_relative 'player'
 require_relative 'utils'
 
 class HumanPlayer < Player
-  def initialize(name = nil, bank)
+  def initialize(name, bank)
     super(name, bank)
     @menu = {
       1 => 'Пропустить',
