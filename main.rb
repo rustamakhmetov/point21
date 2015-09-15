@@ -112,7 +112,8 @@ class Main
   end
 
   def game_end?
-    @players.select(&:win?).any? || @players.count(&:game_end?) == @players.length
+    winner = @players.select(&:win?).any?
+    winner || @players.count(&:game_end?) == @players.length
   end
 end
 
