@@ -77,6 +77,19 @@ class Player
     puts state
   end
 
+  def input_name
+    loop do
+      print 'Введите свое имя: '
+      @name = gets.chomp
+      if @name.nil? || @name.empty?
+        puts 'В не указали свое имя. Попробуйте еще раз.'
+      else
+        break
+      end
+    end
+    @name
+  end
+
   def to_s
     @name
   end

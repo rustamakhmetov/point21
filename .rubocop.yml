@@ -1,4 +1,3 @@
-# Offense count: 10
 Style/Documentation:
   Exclude:
     - 'android_player.rb'
@@ -11,3 +10,7 @@ Style/Documentation:
     - 'not_enough_money.rb'
     - 'player.rb'
     - 'utils.rb'
+
+Style/AsciiComments:
+  Exclude:
+    - 'main.rb'

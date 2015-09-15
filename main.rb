@@ -6,6 +6,7 @@ require_relative 'android_player'
 require_relative 'deck'
 require_relative 'bank'
 require_relative 'utils'
+require_relative 'game_exit'
 
 class Main
   START_BANK = 100
@@ -20,66 +21,75 @@ class Main
 
   def run
     puts 'Игра блэкджек.'
-    name = nil
-    loop do
-      print 'Введите свое имя: '
-      name = gets.chomp
-      if name.nil? || name.empty?
-        puts 'В не указали свое имя. Попробуйте еще раз.'
-      else
-        break
-      end
-    end
-    @human.name = name
+    @human.input_name
     begin
-      start
-      loop do
-        @player = @iter_players.next
-        show_cards
-        action_id = @player.run(@deck)
-        case action_id
-        when :pass then puts "#{@player} пропускает"
-        when :add_card then puts "#{@player} берет карту"
-        when :game_break
-          puts 'Игра прервана'
-          break
-        end
-        if action_id == :game_end || game_end?
-          show_winner
-          if next_play?
-            start
-          else
-            break
-          end
-        end
-        sleep 1
-      end
+      manager
     rescue NotEnoughMoney => e
       puts "[#{e.player}] #{e.message}"
-      winner = e.player == @human ? @android : @human
-      show_winner(winner)
-      if next_play?
-        @human.bank.amount = START_BANK
-        @android.bank.amount = START_BANK
-        sleep 3
-        retry
-      end
+      retry if not_money(player)
+    rescue GameExit => e
+      puts e.message
     end
   end
 
   private
 
+  def manager
+    start
+    loop do
+      @player = @iter_players.next
+      show_cards
+      action_id = @player.run(@deck)
+      send action_id if action_id
+      send :game_end if game_end?
+      sleep 1
+    end
+  end
+
+  def not_money(player)
+    winner = player == @human ? @android : @human
+    show_winner(winner)
+    if next_play?
+      @human.bank.amount = START_BANK
+      @android.bank.amount = START_BANK
+      sleep 3
+      true
+    else
+      false
+    end
+  end
+
+  def game_end
+    show_winner
+    if next_play?
+      start
+    else
+      fail GameExit
+    end
+  end
+
+  def add_card
+    puts "#{@player} берет карту"
+  end
+
+  def pass
+    puts "#{@player} пропускает"
+  end
+
+  def game_break
+    fail GameExit, 'Игра прервана'
+  end
+
   def start
     @iter_players = @players.cycle
     @deck.fill
-    @human.clear_cards
-    @android.clear_cards
-    2.times do
-      @human << @deck.shift
-      @android << @deck.shift
+    @players.each do |player|
+      player.clear_cards
+      2.times do
+        player << @deck.shift
+      end
+      @bank << player.withdraw_money(@rate)
     end
-    @bank << @human.withdraw_money(@rate)
-    @bank << @android.withdraw_money(@rate)
   end
 
   def next_play?
@@ -95,14 +105,22 @@ class Main
     winner = winner1 || @players.select { |x| !x.lost? }.max_by(&:score)
     if winner1.nil? && (winner.nil? || @human.score == @android.score)
       puts 'Ничья'
-      amount = @bank.to_i / 2
-      @bank.transfer(@human.bank, amount)
-      @bank.transfer(@android.bank, amount)
+      transfer_bank
     else
-      @bank.transfer(winner.bank, @bank.to_i)
+      transfer_bank winner
       puts "Выиграл #{winner}"
     end
     show_cards(true)
+  end
+
+  def transfer_bank(winner = nil)
+    if winner
+      @bank.transfer(winner.bank, @bank.to_i)
+    else
+      amount = @bank.to_i / 2
+      @bank.transfer(@human.bank, amount)
+      @bank.transfer(@android.bank, amount)
+    end
   end
 
   def show_cards(visible = false)
