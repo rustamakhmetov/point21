@@ -11,15 +11,15 @@ class Deck
   def fill
     @cards = []
     Lear.all.each do |lear|
-      (2..10).each do |nominal|
-        @cards << Card.new(lear, Card::SIMPLE, nominal)
-      end
-      %w(J Q K).each do |symbol|
-        @cards << Card.new(lear, Card::PICTURE, 10, symbol)
-      end
-      @cards << Card.new(lear, Card::ACE, 11, 'A')
+      (2..10).each { |nominal| add_card(lear, Card::SIMPLE, nominal) }
+      %w(J Q K).each { |symbol| add_card(lear, Card::PICTURE, 10, symbol) }
+      add_card(lear, Card::ACE, 11, 'A')
     end
     shuffle!
+  end
+
+  def add_card(lear, type, nominal, symbol = nil)
+    @cards << Card.new(lear, type, nominal, symbol)
   end
 
   def shuffle!
